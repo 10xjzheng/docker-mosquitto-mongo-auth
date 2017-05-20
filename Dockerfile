@@ -14,7 +14,7 @@ ENV MOSQUITTO_VERSION=v1.4.11
 COPY run.sh /
 COPY libressl.patch /
 #RUN buildDeps='git build-base alpine-sdk openssl-dev libwebsockets-dev c-ares-dev util-linux-dev hiredis-dev curl-dev libxslt docbook-xsl'; \
-RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-linux-dev hiredis-dev curl-dev libxslt docbook-xsl'; \
+RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-linux-dev hiredis-dev curl-dev libxslt docbook-xsl automake autoconf libtool'; \
     chmod +x /run.sh && \
     mkdir -p /var/lib/mosquitto && \
     touch /var/lib/mosquitto/.keep && \
@@ -22,6 +22,12 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     apk update && \
     #apk add $buildDeps hiredis libwebsockets libuuid c-ares openssl curl ca-certificates && \
     apk add $buildDeps hiredis libwebsockets libuuid c-ares libressl curl ca-certificates && \
+    git clone https://github.com/mongodb/mongo-c-driver.git && \
+    cd mongo-c-driver && \
+    sh autogen.sh --with-libbson=bundled && \
+    make && \
+    make install && \
+    cd .. && \
     git clone https://github.com/eclipse/mosquitto.git && \
     cd mosquitto && \
     git checkout ${MOSQUITTO_VERSION} -b ${MOSQUITTO_VERSION} && \
@@ -33,11 +39,11 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     # wo WITH_MEMORY_TRACKING=no, mosquitto segfault after receiving first message
     # libressl does not suppor PSK
     make WITH_MEMORY_TRACKING=no WITH_SRV=yes WITH_WEBSOCKETS=yes WITH_TLS_PSK=no && \
-    make install && \
+    make install && \  
     git clone git://github.com/jpmens/mosquitto-auth-plug.git && \
     cd mosquitto-auth-plug && \
     cp config.mk.in config.mk && \
-    sed -i "s/BACKEND_REDIS ?= no/BACKEND_REDIS ?= yes/" config.mk && \
+    sed -i "s/BACKEND_MONGO ?= no/BACKEND_MONGO ?= yes/" config.mk && \
     sed -i "s/BACKEND_HTTP ?= no/BACKEND_HTTP ?= yes/" config.mk && \
     sed -i "s/BACKEND_MYSQL ?= yes/BACKEND_MYSQL ?= no/" config.mk && \
     sed -i "s/MOSQUITTO_SRC =/MOSQUITTO_SRC = ..\//" config.mk && \
