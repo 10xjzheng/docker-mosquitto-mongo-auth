@@ -1,7 +1,7 @@
 docker-mosquitto-mongo-auth
 ================
 
-Mosquitto MQTT Broker on Docker Image.
+Mosquitto MQTT Broker on Docker Image with authentication via mongoDB.
 
 # Version
 
