@@ -1,4 +1,4 @@
-docker-mosquitto
+docker-mosquitto-mongo-auth
 ================
 
 Mosquitto MQTT Broker on Docker Image.
