@@ -27,7 +27,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     sh autogen.sh --with-libbson=bundled && \
     make && \
     make install && \
-    cd .. && \
+    cd / && \
     git clone https://github.com/eclipse/mosquitto.git && \
     cd mosquitto && \
     git checkout ${MOSQUITTO_VERSION} -b ${MOSQUITTO_VERSION} && \
@@ -51,7 +51,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     make && \
     cp auth-plug.so /usr/local/lib/ && \
     cp np /usr/local/bin/ && chmod +x /usr/local/bin/np && \
-    cd / && rm -rf mosquitto && rm /libressl.patch && \
+    cd / && rm -rf mosquitto && rm /libressl.patch && rm -rf mongo-c-driver && \
     apk del $buildDeps && rm -rf /var/cache/apk/*
 
 ADD mosquitto.conf /etc/mosquitto/mosquitto.conf
