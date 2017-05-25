@@ -25,7 +25,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     apk add $buildDeps hiredis libwebsockets libuuid c-ares libressl curl ca-certificates && \
     git clone https://github.com/mongodb/mongo-c-driver.git && \
     cd mongo-c-driver && \
-    git checkout ${MOSQUITTO_VERSION} && \
+    git checkout ${MONGOC_VERSION} && \
     sh autogen.sh --with-libbson=bundled && \
     make && \
     make install && \
