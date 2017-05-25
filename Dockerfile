@@ -11,6 +11,7 @@ RUN addgroup -S mosquitto && \
 ENV PATH=/usr/local/bin:/usr/local/sbin:$PATH
 ENV MOSQUITTO_VERSION=v1.4.11
 ENV MONGOC_VERSION=9982861dac67bae659ce8a3370b18c3a44f764fc
+ENV AUTHPLUG_VERSION=b74a79a6767b56c773e21e9c4cf12b392c29e8e2
 
 COPY run.sh /
 COPY libressl.patch /
@@ -44,6 +45,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     make install && \  
     git clone git://github.com/jpmens/mosquitto-auth-plug.git && \
     cd mosquitto-auth-plug && \
+    git checkout ${AUTHPLUG_VERSION} && \
     cp config.mk.in config.mk && \
     sed -i "s/BACKEND_MONGO ?= no/BACKEND_MONGO ?= yes/" config.mk && \
     sed -i "s/BACKEND_MYSQL ?= yes/BACKEND_MYSQL ?= no/" config.mk && \
