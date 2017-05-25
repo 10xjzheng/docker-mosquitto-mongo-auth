@@ -10,6 +10,7 @@ RUN addgroup -S mosquitto && \
 
 ENV PATH=/usr/local/bin:/usr/local/sbin:$PATH
 ENV MOSQUITTO_VERSION=v1.4.11
+ENV MONGOC_VERSION=1.6.3
 
 COPY run.sh /
 COPY libressl.patch /
@@ -24,6 +25,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     apk add $buildDeps hiredis libwebsockets libuuid c-ares libressl curl ca-certificates && \
     git clone https://github.com/mongodb/mongo-c-driver.git && \
     cd mongo-c-driver && \
+    git checkout ${MOSQUITTO_VERSION} && \
     sh autogen.sh --with-libbson=bundled && \
     make && \
     make install && \
