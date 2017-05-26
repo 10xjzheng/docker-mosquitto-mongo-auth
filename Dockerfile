@@ -3,7 +3,7 @@ FROM alpine:edge
 EXPOSE 1883
 EXPOSE 9883
 
-VOLUME ["/var/lib/mosquitto", "/etc/mosquitto", "/etc/mosquitto.d"]
+#VOLUME ["/var/lib/mosquitto", "/etc/mosquitto", "/etc/mosquitto.d"]
 VOLUME ["/mosquitto/config", "/mosquitto/data", "/mosquitto/log"]
 
 RUN addgroup -S mosquitto && \
