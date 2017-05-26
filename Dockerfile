@@ -29,8 +29,8 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     make && \
     make install && \
     cd / && \
-    git clone https://github.com/eclipse/mosquitto.git && \
-    cd mosquitto && \
+    git clone https://github.com/eclipse/mosquitto.git mosquitto_src && \
+    cd mosquitto_src && \
     git checkout ${MOSQUITTO_VERSION} -b ${MOSQUITTO_VERSION} && \
     sed -i -e "s|(INSTALL) -s|(INSTALL)|g" -e 's|--strip-program=${CROSS_COMPILE}${STRIP}||' */Makefile */*/Makefile && \
     sed -i "s@/usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl@/usr/share/xml/docbook/xsl-stylesheets-1.79.1/manpages/docbook.xsl@" man/manpage.xsl && \
@@ -53,7 +53,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     make && \
     cp auth-plug.so /usr/local/lib/ && \
     cp np /usr/local/bin/ && chmod +x /usr/local/bin/np && \
-    cd / && rm -rf mosquitto && rm /libressl.patch && rm -rf mongo-c-driver && \
+    cd / && rm -rf mosquitto_src && rm /libressl.patch && rm -rf mongo-c-driver && \
     apk del $buildDeps && rm -rf /var/cache/apk/*
 
 ADD mosquitto.conf /mosquitto/config/mosquitto.conf
