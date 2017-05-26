@@ -4,6 +4,7 @@ EXPOSE 1883
 EXPOSE 9883
 
 VOLUME ["/var/lib/mosquitto", "/etc/mosquitto", "/etc/mosquitto.d"]
+VOLUME ["/mosquitto/config", "/mosquitto/data", "/mosquitto/log"]
 
 RUN addgroup -S mosquitto && \
     adduser -S -H -h /var/empty -s /sbin/nologin -D -G mosquitto mosquitto
@@ -15,15 +16,12 @@ ENV AUTHPLUG_VERSION=b74a79a6767b56c773e21e9c4cf12b392c29e8e2
 
 COPY run.sh /
 COPY libressl.patch /
-#RUN buildDeps='git build-base alpine-sdk openssl-dev libwebsockets-dev c-ares-dev util-linux-dev hiredis-dev curl-dev libxslt docbook-xsl'; \
-RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-linux-dev hiredis-dev curl-dev libxslt docbook-xsl automake autoconf libtool'; \
+RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-linux-dev curl-dev libxslt docbook-xsl automake autoconf libtool'; \
     chmod +x /run.sh && \
-    mkdir -p /var/lib/mosquitto && \
-    touch /var/lib/mosquitto/.keep && \
-    mkdir -p /etc/mosquitto.d && \
+    mkdir -p /mosquitto/data && \
+    touch /mosquitto/data/.keep && \
     apk update && \
-    #apk add $buildDeps hiredis libwebsockets libuuid c-ares openssl curl ca-certificates && \
-    apk add $buildDeps hiredis libwebsockets libuuid c-ares libressl curl ca-certificates && \
+    apk add $buildDeps libwebsockets libuuid c-ares libressl curl ca-certificates && \
     git clone https://github.com/mongodb/mongo-c-driver.git && \
     cd mongo-c-driver && \
     git checkout ${MONGOC_VERSION} && \
@@ -42,7 +40,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     # wo WITH_MEMORY_TRACKING=no, mosquitto segfault after receiving first message
     # libressl does not suppor PSK
     make WITH_MEMORY_TRACKING=no WITH_SRV=yes WITH_WEBSOCKETS=yes WITH_TLS_PSK=no && \
-    make install && \  
+    make install && \
     git clone git://github.com/jpmens/mosquitto-auth-plug.git && \
     cd mosquitto-auth-plug && \
     git checkout ${AUTHPLUG_VERSION} && \
@@ -58,7 +56,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     cd / && rm -rf mosquitto && rm /libressl.patch && rm -rf mongo-c-driver && \
     apk del $buildDeps && rm -rf /var/cache/apk/*
 
-ADD mosquitto.conf /etc/mosquitto/mosquitto.conf
+ADD mosquitto.conf /mosquitto/config/mosquitto.conf
 
 ENTRYPOINT ["/run.sh"]
 CMD ["mosquitto"]
