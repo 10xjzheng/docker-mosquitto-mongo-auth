@@ -20,6 +20,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     chmod +x /run.sh && \
     mkdir -p /mosquitto/data && \
     touch /mosquitto/data/.keep && \
+    mkdir -p /mosquitto/conf/conf.d && \
     apk update && \
     apk add $buildDeps libwebsockets libuuid c-ares libressl curl ca-certificates && \
     git clone https://github.com/mongodb/mongo-c-driver.git && \
