@@ -10,7 +10,7 @@ RUN addgroup -S mosquitto && \
     adduser -S -H -h /var/empty -s /sbin/nologin -D -G mosquitto mosquitto
 
 ENV PATH=/usr/local/bin:/usr/local/sbin:$PATH
-ENV MOSQUITTO_VERSION=v1.4.11
+ENV MOSQUITTO_VERSION=v1.4.12
 ENV MONGOC_VERSION=9982861dac67bae659ce8a3370b18c3a44f764fc
 ENV AUTHPLUG_VERSION=b74a79a6767b56c773e21e9c4cf12b392c29e8e2
 
@@ -47,6 +47,7 @@ RUN buildDeps='git build-base libressl-dev libwebsockets-dev c-ares-dev util-lin
     git checkout ${AUTHPLUG_VERSION} && \
     cp config.mk.in config.mk && \
     sed -i "s/BACKEND_MONGO ?= no/BACKEND_MONGO ?= yes/" config.mk && \
+    sed -i "s/BACKEND_FILES ?= no/BACKEND_FILES ?= yes/" config.mk && \
     sed -i "s/BACKEND_MYSQL ?= yes/BACKEND_MYSQL ?= no/" config.mk && \
     sed -i "s/MOSQUITTO_SRC =/MOSQUITTO_SRC = ..\//" config.mk && \
     sed -i "s/EVP_MD_CTX_new/EVP_MD_CTX_create/g" cache.c && \
