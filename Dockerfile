@@ -10,7 +10,7 @@ RUN addgroup -S mosquitto && \
     adduser -S -H -h /var/empty -s /sbin/nologin -D -G mosquitto mosquitto
 
 ENV PATH=/usr/local/bin:/usr/local/sbin:$PATH
-ENV MOSQUITTO_VERSION=v1.4.12
+ENV MOSQUITTO_VERSION=v1.4.14
 ENV MONGOC_VERSION=9982861dac67bae659ce8a3370b18c3a44f764fc
 ENV AUTHPLUG_VERSION=b74a79a6767b56c773e21e9c4cf12b392c29e8e2
 
